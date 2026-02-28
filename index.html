@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SolemnKnight's Portal</title>
+
+<!-- Favicon -->
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@200..400" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
+
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        primary: "#00F5FF",
+        primaryLight: "#008C95",
+        backgroundDark: "#050508",
+        backgroundLight: "#F2EFE9"
+      },
+      fontFamily: {
+        display: ["Space Grotesk", "sans-serif"]
+      }
+    }
+  }
+}
+</script>
+
+<style type="text/tailwindcss">
+@layer components {
+
+  body { @apply transition-colors duration-500 relative; }
+
+  /* Entrance animation */
+  .page-enter {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: pageEnter 0.8s ease forwards;
+  }
+
+  @keyframes pageEnter {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-enter {
+    opacity: 0;
+    transform: translateY(15px);
+    animation: cardEnter 0.6s ease forwards;
+  }
+
+  @keyframes cardEnter {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Cards */
+  .glass-card {
+    @apply bg-white/60 dark:bg-white/5 backdrop-blur-lg border border-black/10 dark:border-white/10 rounded-2xl p-4 flex items-center transition-all duration-300 ease-out;
+    transform: translateZ(0);
+  }
+
+  .glass-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    border-color: rgba(0,245,255,0.5);
+  }
+
+  /* Icon circle */
+  .brand-icon-circle {
+    @apply size-12 rounded-full border flex items-center justify-center transition-all duration-300;
+    @apply border-primaryLight text-primaryLight dark:border-primary dark:text-primary;
+  }
+
+  .brand-icon-circle i,
+  .brand-icon-circle .material-symbols-outlined {
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  .glass-card:hover .brand-icon-circle {
+    transform: scale(1.1);
+  }
+
+  /* Stars */
+  .star {
+    @apply absolute rounded-full bg-primaryLight/30 dark:bg-primary/40;
+    animation: twinkle 4s ease-in-out infinite;
+  }
+
+  @keyframes twinkle {
+    0%,100% { opacity: 0.2; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
+  }
+
+  /* Shooting stars */
+  .shooting-star {
+    position: absolute;
+    width: 200px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #00F5FF);
+    opacity: 0;
+    animation: shoot 8s linear infinite;
+  }
+
+  @keyframes shoot {
+    0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 0; }
+    5% { opacity: 1; }
+    25% { transform: translateX(-1000px) translateY(1000px) rotate(-45deg); opacity: 0; }
+    100% { opacity: 0; }
+  }
+
+  /* Hero glow */
+  .hero-glow {
+    position:absolute;
+    width:600px;
+    height:600px;
+    border-radius:50%;
+    filter: blur(70px);
+    transition: background 0.6s ease, opacity 0.6s ease, transform 0.8s ease;
+  }
+
+  html:not(.dark) .hero-glow {
+    background: radial-gradient(circle, rgba(0,140,149,0.25) 0%, transparent 70%);
+    opacity: 0.6;
+    transform: scale(1);
+  }
+
+  html.dark .hero-glow {
+    background: radial-gradient(circle, rgba(0,245,255,0.5) 0%, transparent 70%);
+    opacity: 0.9;
+    transform: scale(1.15);
+    animation: darkPulse 6s ease-in-out infinite;
+  }
+
+  @keyframes darkPulse {
+    0%,100% { transform: scale(1.15); }
+    50% { transform: scale(1.22); }
+  }
+
+  /* Explore */
+  .explore-divider {
+    @apply w-32 h-[1px] bg-gradient-to-r from-transparent via-primaryLight dark:via-primary to-transparent mb-3 opacity-70;
+  }
+
+  .arrow-float {
+    animation: arrowFloat 2s ease-in-out infinite;
+  }
+
+  @keyframes arrowFloat {
+    0%,100% { transform: translateY(0); opacity:0.6; }
+    50% { transform: translateY(8px); opacity:1; }
+  }
+
+}
+</style>
+</head>
+
+<body class="bg-backgroundLight dark:bg-backgroundDark text-slate-800 dark:text-white font-display overflow-x-hidden">
+
+<!-- Light mode soft accent -->
+<div class="absolute inset-0 pointer-events-none -z-10 dark:hidden">
+  <div class="absolute top-[-200px] right-[-150px] w-[600px] h-[600px] 
+    bg-gradient-to-br from-primaryLight/20 to-transparent 
+    rounded-full blur-[120px]">
+  </div>
+</div>
+
+<div id="bg" class="fixed inset-0 pointer-events-none"></div>
+
+<div class="relative min-h-screen flex flex-col items-center z-10">
+
+<div class="hero-glow top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+
+<div class="w-full max-w-[540px] px-6 page-enter">
+
+<header class="flex justify-between items-center pt-10 pb-6">
+
+<span class="material-symbols-outlined text-primaryLight dark:text-primary text-2xl">
+shield_with_heart
+</span>
+
+<button onclick="toggleTheme()" 
+class="relative w-14 h-7 rounded-full bg-slate-300 dark:bg-slate-800 border border-black/10 dark:border-white/10 transition-colors duration-300 overflow-hidden">
+
+<span id="lightIcon"
+class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-[14px] text-slate-500 opacity-0 transition-opacity duration-300">
+light_mode
+</span>
+
+<span id="darkIcon"
+class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-[14px] text-slate-500 opacity-0 transition-opacity duration-300">
+dark_mode
+</span>
+
+<div id="themeKnob"
+class="absolute top-1 left-1 w-5 h-5 rounded-full bg-white dark:bg-primary shadow-md transition-transform duration-300">
+</div>
+
+</button>
+</header>
+
+<section class="text-center py-10">
+<h1 class="text-6xl font-bold tracking-tight">SolemnKnight</h1>
+<p class="text-primaryLight dark:text-primary tracking-widest text-xs mt-3">Stay Solemn.</p>
+<p class="text-gray-600 dark:text-gray-400 text-sm mt-4 tracking-wider">Tech. Games. Photography.</p>
+
+<div class="flex flex-col items-center pt-8">
+<span class="text-[9px] tracking-[0.5em] uppercase opacity-60 mb-2">Explore</span>
+<div class="explore-divider"></div>
+<span class="material-symbols-outlined text-primaryLight dark:text-primary text-xl arrow-float">
+keyboard_double_arrow_down
+</span>
+</div>
+</section>
+
+<div class="space-y-4 pb-20">
+
+<!-- Captures with shutter icon -->
+<a class="glass-card card-enter" style="animation-delay:0.1s" href="https://www.instagram.com/solemnkshots/" target="_blank">
+<div class="brand-icon-circle">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="w-6 h-6">
+<circle cx="12" cy="12" r="9"></circle>
+<path d="M12 3v6M12 21v-6M3 12h6M21 12h-6M5.6 5.6l4.2 4.2M18.4 18.4l-4.2-4.2M5.6 18.4l4.2-4.2M18.4 5.6l-4.2 4.2"></path>
+</svg>
+</div>
+<div class="ml-5"><h3 class="font-semibold">Captures</h3><p class="text-xs text-gray-500 dark:text-gray-400">Photography</p></div>
+</a>
+
+<a class="glass-card card-enter" style="animation-delay:0.2s" href="http://www.youtube.com/@solemnknight9" target="_blank">
+<div class="brand-icon-circle"><i class="fa-brands fa-youtube"></i></div>
+<div class="ml-5"><h3 class="font-semibold">Gaming Channel</h3><p class="text-xs text-gray-500 dark:text-gray-400">YouTube</p></div>
+</a>
+
+<a class="glass-card card-enter" style="animation-delay:0.3s" href="https://github.com/SaiGanesh9" target="_blank">
+<div class="brand-icon-circle"><i class="fa-brands fa-github"></i></div>
+<div class="ml-5"><h3 class="font-semibold">My Repository</h3><p class="text-xs text-gray-500 dark:text-gray-400">GitHub</p></div>
+</a>
+
+<a class="glass-card card-enter" style="animation-delay:0.4s" href="https://www.instagram.com/saiganeshh_09/" target="_blank">
+<div class="brand-icon-circle"><i class="fa-brands fa-instagram"></i></div>
+<div class="ml-5"><h3 class="font-semibold">Personal</h3><p class="text-xs text-gray-500 dark:text-gray-400">Instagram</p></div>
+</a>
+
+<a class="glass-card card-enter" style="animation-delay:0.5s" href="https://discord.gg/VcqUgyyZwN" target="_blank">
+<div class="brand-icon-circle"><i class="fa-brands fa-discord"></i></div>
+<div class="ml-5"><h3 class="font-semibold">Solemn's Tavern</h3><p class="text-xs text-gray-500 dark:text-gray-400">Discord</p></div>
+</a>
+
+<a class="glass-card card-enter" style="animation-delay:0.6s" href="https://www.linkedin.com/in/saiganesh9/" target="_blank">
+<div class="brand-icon-circle"><i class="fa-brands fa-linkedin-in"></i></div>
+<div class="ml-5"><h3 class="font-semibold">Professional</h3><p class="text-xs text-gray-500 dark:text-gray-400">LinkedIn</p></div>
+</a>
+
+<a class="glass-card card-enter" style="animation-delay:0.7s" href="mailto:solemnknight9@gmail.com">
+<div class="brand-icon-circle"><span class="material-symbols-outlined">mail</span></div>
+<div class="ml-5"><h3 class="font-semibold">Contact Me</h3><p class="text-xs text-gray-500 dark:text-gray-400">Email</p></div>
+</a>
+
+</div>
+
+<footer class="w-full py-16 flex flex-col items-center gap-6 border-t border-black/10 dark:border-white/10">
+
+<p class="text-[9px] tracking-[0.6em] uppercase opacity-60">that's me</p>
+
+<div class="flex flex-col items-center gap-2">
+<p class="text-[10px] tracking-widest uppercase">© 2026 SOLEMNKNIGHT</p>
+<p class="text-[8px] tracking-[0.3em] uppercase opacity-50">EST. 2002</p>
+</div>
+
+<div class="mt-4 opacity-40 hover:opacity-100 transition duration-500">
+<span class="material-symbols-outlined text-2xl text-primaryLight dark:text-primary">
+pets
+</span>
+</div>
+
+</footer>
+
+</div>
+</div>
+
+<script>
+function toggleTheme(){
+  const html=document.documentElement;
+  html.classList.toggle("dark");
+  localStorage.setItem("theme", html.classList.contains("dark")?"dark":"light");
+  updateToggleUI();
+}
+
+function updateToggleUI(){
+  const knob=document.getElementById("themeKnob");
+  const lightIcon=document.getElementById("lightIcon");
+  const darkIcon=document.getElementById("darkIcon");
+
+  if(document.documentElement.classList.contains("dark")){
+    knob.style.transform="translateX(28px)";
+    lightIcon.style.opacity="1";
+    darkIcon.style.opacity="0";
+  } else {
+    knob.style.transform="translateX(0px)";
+    lightIcon.style.opacity="0";
+    darkIcon.style.opacity="1";
+  }
+}
+
+window.addEventListener("DOMContentLoaded",()=>{
+  if(localStorage.getItem("theme")==="light"){
+    document.documentElement.classList.remove("dark");
+  }
+  updateToggleUI();
+});
+
+const bg=document.getElementById("bg");
+
+for(let i=0;i<25;i++){
+  const s=document.createElement("div");
+  s.className="star";
+  s.style.width=s.style.height=Math.random()*2+"px";
+  s.style.top=Math.random()*100+"%";
+  s.style.left=Math.random()*100+"%";
+  bg.appendChild(s);
+}
+
+for(let i=0;i<3;i++){
+  const sh=document.createElement("div");
+  sh.className="shooting-star";
+  sh.style.top=Math.random()*100+"%";
+  sh.style.left=Math.random()*100+"%";
+  sh.style.animationDelay=Math.random()*6+"s";
+  bg.appendChild(sh);
+}
+
+let ticking=false;
+window.addEventListener("scroll",()=>{
+  if(!ticking){
+    requestAnimationFrame(()=>{
+      bg.style.transform=`translateY(${window.scrollY * -0.1}px)`;
+      ticking=false;
+    });
+    ticking=true;
+  }
+});
+</script>
+
+</body>
+</html>
